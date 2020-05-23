@@ -1,7 +1,26 @@
-# This is just an example to get you started. A typical library package
-# exports the main API in this file. Note that you cannot rename this file
-# but you can remove it if you wish.
+import jester
+import db_mysql
+import os
 
-proc add*(x, y: int): int =
-  ## Adds two files together.
-  return x + y
+proc setup(): void = 
+  # DB接続設定取得
+  let localhost = getEnv("coffe_sql_host")
+  let user = getEnv("coffe_sql_user")
+  let pass = getEnv("coffe_sql_pass")
+  let db_name = getEnv("coffe_sql_db")
+  
+  # DBと接続
+  let db = open(localhost, user, pass, db_name)
+  # クエリ実行APIが完成してないので、一旦ここでクローズ
+  # TODO：実行処理が中断した際に呼ばれるプロージャに実装する
+  db.close()
+
+proc main(): void =
+  setup()
+  routes:
+    get "/":
+      resp("Hello world")
+    
+
+if isMainModule:
+  main()
